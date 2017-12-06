@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>全排列（非递归求顺序）算法</title>
+</head>
+<body>
+	<script type="text/javascript">  
+/*  
+全排列（非递归求顺序）算法  
+1、建立位置数组，即对位置进行排列，排列成功后转换为元素的排列；  
+2、按如下算法求全排列：  
+设P是1～n(位置编号)的一个全排列：p = p1,p2...pn = p1,p2...pj-1,pj,pj+1...pk-1,pk,pk+1...pn  
+(1)从排列的尾部开始，找出第一个比右边位置编号小的索引j（j从首部开始计算），即j = max{i | pi < pi+1}  
+(2)在pj的右边的位置编号中，找出所有比pj大的位置编号中最小的位置编号的索引k，即 k = max{i | pi > pj}  
+   pj右边的位置编号是从右至左递增的，因此k是所有大于pj的位置编号中索引最大的  
+(3)交换pj与pk  
+(4)再将pj+1...pk-1,pk,pk+1...pn翻转得到排列p' = p1,p2...pj-1,pj,pn...pk+1,pk,pk-1...pj+1  
+(5)p'便是排列p的下一个排列  
+
+例如：  
+24310是位置编号0～4的一个排列，求它下一个排列的步骤如下：  
+(1)从右至左找出排列中第一个比右边数字小的数字2；  
+(2)在该数字后的数字中找出比2大的数中最小的一个3；  
+(3)将2与3交换得到34210；  
+(4)将原来2（当前3）后面的所有数字翻转，即翻转4210，得30124；  
+(5)求得24310的下一个排列为30124。  
+*/ 
+var count = 0;  
+function show(arr) {  
+    document.write("P<sub>" + ++count + "</sub>: " + arr + "<br />");  
+}  
+function swap(arr, i, j) {  
+    var t = arr[i];  
+    arr[i] = arr[j];  
+    arr[j] = t;  
+
+}  
+function sort(index) {  
+    for (var j = index.length - 2; j >= 0 && index[j] > index[j + 1]; j--)  
+        ; //本循环从位置数组的末尾开始，找到第一个左边小于右边的位置，即j  
+    if (j < 0) return false; //已完成全部排列  
+    for (var k = index.length - 1; index[k] < index[j]; k--)  
+        ; //本循环从位置数组的末尾开始，找到比j位置大的位置中最小的，即k  
+    swap(index, j, k);  
+    for (j = j + 1, k = index.length - 1; j < k; j++, k--)  
+        swap(index, j, k); //本循环翻转j+1到末尾的所有位置  
+    return true;  
+}  
+function perm(arr) {  
+    var index = new Array(arr.length);  
+    for (var i = 0; i < index.length; i++)  
+        index[i] = i;  
+    do {  
+        var temp = [];  
+        for (i = 0; i < index.length; i++)  
+            temp.push(arr[index[i]]);  
+        show(temp);  
+    } while (sort(index));  
+}  
+perm(["e1", "e2", "e3", "e4"]);  
+</script>  
+</body>
+</html>

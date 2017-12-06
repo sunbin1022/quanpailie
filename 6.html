@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>全排列（非递归求模）算法  </title>
+</head>
+<body>
+	<script type="text/javascript">  
+/*  
+全排列（非递归求模）算法  
+1、初始化存放全排列结果的数组result，与原数组的元素个数相等；  
+2、计算n个元素全排列的总数，即n!；  
+3、从>=0的任意整数开始循环n!次，每次累加1，记为index；  
+4、取第1个元素arr[0]，求1进制的表达最低位，即求index模1的值w，将第1个元素（arr[0]）插入result的w位置，并将index迭代为index\1；  
+5、取第2个元素arr[1]，求2进制的表达最低位，即求index模2的值w，将第2个元素（arr[1]）插入result的w位置，并将index迭代为index\2；  
+6、取第3个元素arr[2]，求3进制的表达最低位，即求index模3的值w，将第3个元素（arr[2]）插入result的w位置，并将index迭代为index\3；  
+7、……  
+8、直到取最后一个元素arr[arr.length-1]，此时求得一个排列；  
+9、当index循环完成，便求得所有排列。  
+
+例：  
+求4个元素["a", "b", "c", "d"]的全排列, 共循环4!=24次，可从任意>=0的整数index开始循环，每次累加1，直到循环完index+23后结束；  
+假设index=13（或13+24，13+2*24，13+3*24…），因为共4个元素，故迭代4次，则得到的这一个排列的过程为：  
+第1次迭代，13/1，商=13，余数=0，故第1个元素插入第0个位置（即下标为0），得["a"]；  
+第2次迭代，13/2, 商=6，余数=1，故第2个元素插入第1个位置（即下标为1），得["a", "b"]；  
+第3次迭代，6/3, 商=2，余数=0，故第3个元素插入第0个位置（即下标为0），得["c", "a", "b"]；  
+第4次迭代，2/4，商=0，余数=2, 故第4个元素插入第2个位置（即下标为2），得["c", "a", "d", "b"]；  
+*/ 
+var count = 0;  
+function show(arr) {  
+    document.write("P<sub>" + ++count + "</sub>: " + arr + "<br />");  
+}  
+function perm(arr) {  
+    var result = new Array(arr.length);  
+    var fac = 1;  
+    for (var i = 2; i <= arr.length; i++)  
+        fac *= i;  
+    for (index = 0; index < fac; index++) {  
+        var t = index;  
+        for (i = 1; i <= arr.length; i++) {  
+            var w = t % i;  
+            for (j = i - 1; j > w; j--)  
+                result[j] = result[j - 1];  
+            result[w] = arr[i - 1];  
+            t = Math.floor(t / i);  
+        }  
+        show(result);  
+    }  
+}  
+perm(["e1", "e2", "e3", "e4"]);  
+</script>  
+</body>
+</html>

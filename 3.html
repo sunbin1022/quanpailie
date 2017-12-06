@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en"> 
+<head>  
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />  
+    <title>回溯（递归）</title>  
+</head>  
+<body>  
+<p>回溯（递归）</p>  
+<script type="text/javascript">  
+/*  
+全排列（递归回溯）算法  
+1、建立位置数组，即对位置进行排列，排列成功后转换为元素的排列；  
+2、建立递归函数，用来搜索第n个位置；  
+3、第n个位置搜索方式与八皇后问题类似。  
+*/ 
+var count = 0;  
+function show(arr) {  
+    document.write("P<sub>" + ++count + "</sub>: " + arr + "<br />");  
+}  
+function seek(index, n) {  
+    if (n >= 0) //判断是否已回溯到了第一个位置之前，即已经找到了所有位置排列  
+        if (index[n] < index.length - 1) { //还有下一个位置可选  
+            index[n]++; //选择下一个位置  
+            if ((function () { //该匿名函数判断该位置是否已经被选择过  
+                for (var i = 0; i < n; i++)  
+                    if (index[i] == index[n]) return true; //已选择  
+                return false; //未选择  
+            })())  
+                return seek(index, n); //重新找位置  
+            else 
+                return true; //找到  
+        }  
+        else { //当前无位置可选，进行递归回溯  
+            index[n] = -1; //取消当前位置  
+            if (seek(index, n - 1)) //继续找上一个位置  
+                return seek(index, n); //重新找当前位置  
+            else 
+                return false; //已无位置可选  
+        }  
+    else 
+        return false;  
+}  
+function perm(arr) {  
+    var index = new Array(arr.length);  
+    for (var i = 0; i < index.length; i++)  
+        index[i] = -1; //初始化所有位置为-1，以便++后为0  
+    for (i = 0; i < index.length - 1; i++)  
+        seek(index, i); //先搜索前n-1个位置  
+    while (seek(index, index.length - 1)) { //不断搜索第n个位置，即找到所有位置排列  
+        var temp = [];  
+        for (i = 0; i < index.length; i++) //将位置之转换为元素  
+            temp.push(arr[index[i]]);  
+        show(temp);  
+    }  
+}  
+perm(["e1", "e2", "e3", "e4"]);  
+</script>  
+</body>  
+</html> 
